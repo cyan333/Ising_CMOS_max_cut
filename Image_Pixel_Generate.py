@@ -12,7 +12,7 @@ import random
 
 image_size = 20*20
 rows, cols = (20,20)
-image_name ='testImg_20x20.png'
+image_name ='testImg_20x20_ZTY.png'
 
 def img2bin(row,col,name):
     convertedImg = np.zeros((row, col))
@@ -113,7 +113,7 @@ def H_sigma_cal(r,c,spin,J):
 
 
 def update_spin(H_sigma):
-    if H_sigma > 0:
+    if H_sigma >= 0:
         sigma = -1
     else:
         sigma = 1
@@ -129,7 +129,7 @@ def pad_zeros_2_list(thisArray,r,c):
 def Ising_start(this_spin,J,rows,cols,total_iteration,Ising_KPI):
     for i in range(total_iteration):
         Ising_energy = 0
-        # print('iteration = ' + str(i))
+        print('iteration = ' + str(i))
         next_spin = copy.deepcopy(this_spin)
         # print(thisSpinArray)
         for r in range(1,rows+1):
@@ -148,8 +148,8 @@ def Ising_start(this_spin,J,rows,cols,total_iteration,Ising_KPI):
         #     plt.savefig('Iter2.png')
         #     plt.show()
 
-        # print('next_spin')
-        # print(next_spin)
+        print('next_spin')
+        print(next_spin)
         # print('Ising_energy = ' + str(Ising_energy))
         Ising_KPI.append(Ising_energy)
         this_spin = next_spin
@@ -178,8 +178,8 @@ def annealing(this_spin,rows,cols):
     return this_spin,howmanyTrue
 
 
-def annealing_ver2(number_of_flip, this_spin, img_size):
-    random.seed(1)
+def annealing_ver2(seed,number_of_flip, this_spin, img_size):
+    random.seed(seed)
     this_random = random.sample(range(img_size), number_of_flip)
 
     for i in range(number_of_flip):
@@ -237,13 +237,16 @@ plt.imshow(this_spin, cmap='Greys_r')
 plt.show()
 
 # annealing
-next_spin = annealing_ver2(10,this_spin,image_size)
+next_spin = annealing_ver2(2,50,this_spin,image_size)
+plt.imshow(next_spin, cmap='Greys_r')
+plt.show()
+
 # print(next_spin)
 # start Ising
 this_spin,KPI = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
+print(this_spin)
 # plt.axis('off')
-plt.imshow(this_spin, cmap='Greys')
-plt.savefig('Iter20.png')
+plt.imshow(this_spin, cmap='Greys_r')
 plt.show()
 
 
@@ -257,16 +260,16 @@ plt.show()
 
 
 # show KPI
-figure(figsize=(6.5, 8), dpi=80)
-plt.plot(KPI,marker='o', color='b', linewidth=2)
-plt.xlabel("Spin Iteration",fontsize=16,fontweight='bold')
-plt.ylabel('Energy',fontsize=16,fontweight='bold')
-plt.xticks(np.arange(0,21,2),fontsize=16,fontweight='bold')
-plt.yticks(fontsize=16,fontweight='bold')
-plt.savefig('energy.png')
-plt.show()
-
-
+# figure(figsize=(6.5, 8), dpi=80)
+# plt.plot(KPI,marker='o', color='b', linewidth=2)
+# plt.xlabel("Spin Iteration",fontsize=16,fontweight='bold')
+# plt.ylabel('Energy',fontsize=16,fontweight='bold')
+# plt.xticks(np.arange(0,21,2),fontsize=16,fontweight='bold')
+# plt.yticks(fontsize=16,fontweight='bold')
+# plt.savefig('energy.png')
+# plt.show()
+#
+#
 
 
 
