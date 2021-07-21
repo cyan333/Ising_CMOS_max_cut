@@ -10,9 +10,9 @@ import copy
 import random
 
 
-image_size = 20*20
-rows, cols = (20,20)
-image_name ='testImg_20x20_ZTY.png'
+image_size = 30*30
+rows, cols = (30,30)
+image_name ='testImg_30x30.png'
 
 def img2bin(row,col,name):
     convertedImg = np.zeros((row, col))
@@ -127,33 +127,43 @@ def pad_zeros_2_list(thisArray,r,c):
 
 
 def Ising_start(this_spin,J,rows,cols,total_iteration,Ising_KPI):
+    H_sigma_array = []
     for i in range(total_iteration):
         Ising_energy = 0
-        print('iteration = ' + str(i))
+        # print('iteration = ' + str(i))
         next_spin = copy.deepcopy(this_spin)
         # print(thisSpinArray)
         for r in range(1,rows+1):
+            H_sigma_row = []
             for c in range(1,cols+1):
-                print('(' + str(r-1) + ',' + str(c-1) + ')')
+                # print('(' + str(r-1) + ',' + str(c-1) + ')')
                 H_sigma = H_sigma_cal(r, c, this_spin, J)
+                H_sigma_row.append(H_sigma)
                 Ising_energy = H_sigma*this_spin[r][c] + Ising_energy
                 # print('Ising_energy = ' + str(Ising_energy))
-                print('H_sigma = ' + str(H_sigma))
+                # print('H_sigma = ' + str(H_sigma))
                 this_sigma = update_spin(H_sigma)
-                print('this_sigma = ' + str(this_sigma))
+                # print('this_sigma = ' + str(this_sigma))
                 next_spin[r][c] = this_sigma
+            H_sigma_array.append(H_sigma_row)
+        print("-------------")
+        for i in range(len(H_sigma_array[0])):
+            print(H_sigma_array[i])
+        H_sigma_array = []
+        # H_sigma_array.clear()
         # if i == 2:
         #     plt.imshow(next_spin, cmap='Greys_r')
         #     plt.axis('off')
         #     plt.savefig('Iter2.png')
         #     plt.show()
 
-        print('next_spin')
-        print(next_spin)
+        # print('next_spin')
+        # print(next_spin)
         # print('Ising_energy = ' + str(Ising_energy))
         Ising_KPI.append(Ising_energy)
         this_spin = next_spin
-    return next_spin,Ising_KPI
+
+    return next_spin,Ising_KPI,H_sigma_array
 
 
 def annealing(this_spin,rows,cols):
@@ -196,6 +206,24 @@ def annealing_ver2(seed,number_of_flip, this_spin, img_size):
     return this_spin
 
 
+def annealing_ver3(image_size,this_spin):
+    this_random = np.random.choice([0, 1], size=image_size, p=[.1, .9])
+    # print(this_random)
+    for i in range(image_size):
+        this_c = int(i % math.sqrt(image_size))
+        this_r = int(math.floor(i / math.sqrt(image_size)))
+        # print("i = " + str(i) + "---- (" + str(this_r) + "," + str(this_c) + ")")
+
+        if this_random[i] == 1:
+            if this_spin[this_r+1][this_c+1] == 1:
+                this_spin[this_r+1][this_c+1] = -1
+            else:
+                this_spin[this_r+1][this_c+1] = 1
+        else:
+            this_spin[this_r + 1][this_c + 1] = this_spin[this_r+1][this_c+1]
+    return this_spin
+
+
 J_dict = {ind2str(2,0): [1,1,-1,-1,1,1,1,1],
           ind2str(2,1): [-1,1,1,1,-1,-1,-1,-1],
           ind2str(2,2): [1,1,-1,-1,-1,-1,-1,1],
@@ -218,7 +246,7 @@ Ising_KPI = []
 randomSpin = random_spin_generator(100,rows,cols)
 # print(randomSpin)
 initial_spin = pad_zeros_2_list(randomSpin,rows,cols)
-print(initial_spin)
+# print(initial_spin)
 
 plt.imshow(initial_spin, cmap='Greys_r')
 # plt.axis('off')
@@ -228,35 +256,38 @@ plt.show()
 
 # Generate J
 J = img2dict_generate_j(rows,cols,image_name)
+print("JJJJJJ")
 print(J)
 # start Ising
-this_spin,KPI = Ising_start(initial_spin,J,rows,cols,10,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,10,Ising_KPI)
+
 # plt.axis('off')
 plt.imshow(this_spin, cmap='Greys_r')
-# plt.savefig('Iter10.png')
+plt.show()
+
+
+# annealing
+next_spin = annealing_ver2(1,100,this_spin,image_size)
+plt.imshow(next_spin, cmap='Greys_r')
+plt.show()
+# start Ising
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
+# print(this_spin)
+# plt.axis('off')
+plt.imshow(this_spin, cmap='Greys_r')
 plt.show()
 
 # annealing
-next_spin = annealing_ver2(2,50,this_spin,image_size)
+next_spin = annealing_ver2(1,100,this_spin,image_size)
 plt.imshow(next_spin, cmap='Greys_r')
 plt.show()
-
-# print(next_spin)
 # start Ising
-this_spin,KPI = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
-print(this_spin)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,11,Ising_KPI)
+# print(this_spin)
 # plt.axis('off')
 plt.imshow(this_spin, cmap='Greys_r')
 plt.show()
 
-
-# # annealing
-# next_spin = annealing_ver2(90,this_spin,image_size)
-# # print(next_spin)
-# # start Ising
-# this_spin,KPI = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
-# plt.imshow(this_spin, cmap='Greys')
-# plt.show()
 
 
 # show KPI
@@ -268,7 +299,6 @@ plt.show()
 # plt.yticks(fontsize=16,fontweight='bold')
 # plt.savefig('energy.png')
 # plt.show()
-#
 #
 
 
