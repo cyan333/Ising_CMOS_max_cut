@@ -10,9 +10,9 @@ import copy
 import random
 
 
-image_size = 30*30
-rows, cols = (30,30)
-image_name ='testImg_30x30.png'
+image_size = 64*100
+rows, cols = (64,100)
+image_name ='testImg_64x100.png'
 
 def img2bin(row,col,name):
     convertedImg = np.zeros((row, col))
@@ -146,9 +146,9 @@ def Ising_start(this_spin,J,rows,cols,total_iteration,Ising_KPI):
                 # print('this_sigma = ' + str(this_sigma))
                 next_spin[r][c] = this_sigma
             H_sigma_array.append(H_sigma_row)
-        print("-------------")
-        for i in range(len(H_sigma_array[0])):
-            print(H_sigma_array[i])
+        # print("-------------")
+        # for i in range(len(H_sigma_array[0])):
+        #     print(H_sigma_array[i])
         H_sigma_array = []
         # H_sigma_array.clear()
         # if i == 2:
@@ -188,17 +188,19 @@ def annealing(this_spin,rows,cols):
     return this_spin,howmanyTrue
 
 
-def annealing_ver2(seed,number_of_flip, this_spin, img_size):
+def annealing_ver2(seed,number_of_flip, this_spin, img_size, col):
     random.seed(seed)
     this_random = random.sample(range(img_size), number_of_flip)
 
     for i in range(number_of_flip):
         # this_random = random.randint(0,99)
         # print(this_random[i])
-        this_c = int(this_random[i] % math.sqrt(img_size))
-        this_r = int(math.floor(this_random[i] / math.sqrt(img_size)))
-        # print(this_r)
-        # print(this_c)
+        this_c = int(this_random[i] % col)
+        this_r = int(math.floor(this_random[i] / col))
+        print("xxxxxxx")
+        print(this_random[i])
+        print(this_r)
+        print(this_c)
         if this_spin[this_r+1][this_c+1] == 1:
             this_spin[this_r+1][this_c+1] = -1
         else:
@@ -256,8 +258,8 @@ plt.show()
 
 # Generate J
 J = img2dict_generate_j(rows,cols,image_name)
-print("JJJJJJ")
-print(J)
+# print("JJJJJJ")
+# print(J)
 # start Ising
 this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,10,Ising_KPI)
 
@@ -267,7 +269,7 @@ plt.show()
 
 
 # annealing
-next_spin = annealing_ver2(1,100,this_spin,image_size)
+next_spin = annealing_ver2(1,100,this_spin,image_size, cols)
 plt.imshow(next_spin, cmap='Greys_r')
 plt.show()
 # start Ising
@@ -278,7 +280,7 @@ plt.imshow(this_spin, cmap='Greys_r')
 plt.show()
 
 # annealing
-next_spin = annealing_ver2(1,100,this_spin,image_size)
+next_spin = annealing_ver2(1,100,this_spin,image_size,cols)
 plt.imshow(next_spin, cmap='Greys_r')
 plt.show()
 # start Ising
