@@ -291,7 +291,7 @@ next_spin = annealing_ver2(30,2000,this_spin,image_size, cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
@@ -309,103 +309,148 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(30,1600,this_spin,image_size, cols)
-# plt.imshow(next_spin, cmap='Greys_r')
-# plt.show()
-# start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
-# print(this_spin)
-# plt.axis('off')
-# plt.imshow(this_spin, cmap='Greys_r')
-# plt.show()
-
-# annealing
 next_spin = annealing_ver2(30,1500,this_spin,image_size, cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(20,1200,this_spin,image_size,cols)
+next_spin = annealing_ver2(30,1000,this_spin,image_size, cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+# print(this_spin)
+# plt.axis('off')
+# plt.imshow(this_spin, cmap='Greys_r')
+# plt.show()
+
+# # annealing
+# next_spin = annealing_ver2(20,800,this_spin,image_size,cols)
+# # plt.imshow(next_spin, cmap='Greys_r')
+# # plt.show()
+# # start Ising
+# this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
+# # print(this_spin)
+# # plt.axis('off')
+# # plt.imshow(this_spin, cmap='Greys_r')
+# # plt.show()
+
+# annealing
+next_spin = annealing_ver2(3,600,this_spin,image_size,cols)
+# plt.imshow(next_spin, cmap='Greys_r')
+# plt.show()
+# start Ising
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(3,2600,this_spin,image_size,cols)
+next_spin = annealing_ver2(3,100,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+# print(this_spin)
+# plt.axis('off')
+# plt.imshow(this_spin, cmap='Greys_r')
+# plt.show()
+
+
+# annealing
+next_spin = annealing_ver2(4,300,this_spin,image_size,cols)
+# plt.imshow(next_spin, cmap='Greys_r')
+# plt.show()
+# start Ising
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(4,2000,this_spin,image_size,cols)
+next_spin = annealing_ver2(42,130,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(42,230,this_spin,image_size,cols)
+next_spin = annealing_ver2(42,80,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(6,1900,this_spin,image_size,cols)
+next_spin = annealing_ver2(6,20,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 plt.imshow(this_spin, cmap='Greys_r')
 plt.show()
 
 # annealing
-next_spin = annealing_ver2(63,1200,this_spin,image_size,cols)
+next_spin = annealing_ver2(63,50,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(35,1100,this_spin,image_size,cols)
+next_spin = annealing_ver2(63,10,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
+
+# annealing
+next_spin = annealing_ver2(35,30,this_spin,image_size,cols)
+# plt.imshow(next_spin, cmap='Greys_r')
+# plt.show()
+# start Ising
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,20,Ising_KPI)
+# print(this_spin)
+# plt.axis('off')
+plt.imshow(this_spin, cmap='Greys_r')
+plt.show()
+
+# # annealing
+# next_spin = annealing_ver2(35,20,this_spin,image_size,cols)
+# # plt.imshow(next_spin, cmap='Greys_r')
+# # plt.show()
+# # start Ising
+# this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
+# # print(this_spin)
+# # plt.axis('off')
+# # plt.imshow(this_spin, cmap='Greys_r')
+# # plt.show()
 
 # # annealing
 # next_spin = annealing_ver2(95,50,this_spin,image_size,cols)
@@ -429,16 +474,16 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
 # # plt.imshow(this_spin, cmap='Greys_r')
 # # plt.show()
 
-# annealing
-next_spin = annealing_ver2(21,20,this_spin,image_size,cols)
-# plt.imshow(next_spin, cmap='Greys_r')
+# # annealing
+# next_spin = annealing_ver2(21,20,this_spin,image_size,cols)
+# # plt.imshow(next_spin, cmap='Greys_r')
+# # plt.show()
+# # start Ising
+# this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
+# # print(this_spin)
+# # plt.axis('off')
+# plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
-# start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
-# print(this_spin)
-# plt.axis('off')
-plt.imshow(this_spin, cmap='Greys_r')
-plt.show()
 
 # # annealing
 # next_spin = annealing_ver2(22,40,this_spin,image_size,cols)
