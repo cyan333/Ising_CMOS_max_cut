@@ -277,25 +277,25 @@ J = img2dict_generate_j(rows,cols,image_name)
 # print("JJJJJJ")
 # print(J)
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,3,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,10,Ising_KPI)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(30,2500,this_spin,image_size, cols)
+next_spin = annealing_ver2(30,1500,this_spin,image_size, cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(20,2000,this_spin,image_size,cols)
+next_spin = annealing_ver2(20,1500,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
@@ -310,7 +310,7 @@ next_spin = annealing_ver2(3,2600,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
@@ -321,7 +321,7 @@ next_spin = annealing_ver2(4,2000,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
@@ -427,30 +427,21 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
 plt.imshow(this_spin, cmap='Greys_r')
 plt.show()
 
-# annealing
-next_spin = annealing_ver2(38,100,this_spin,image_size,cols)
-# plt.imshow(next_spin, cmap='Greys_r')
-# plt.show()
-# start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,60,Ising_KPI)
-# print(this_spin)
-# plt.axis('off')
-plt.imshow(this_spin, cmap='Greys_r')
+
+
+
+
+
+# show KPI
+# figure(figsize=(6.5, 8), dpi=80)
+plt.plot(KPI,marker='o', color='b', linewidth=2)
+plt.xlabel("Spin Iteration",fontsize=16,fontweight='bold')
+plt.ylabel('Energy',fontsize=16,fontweight='bold')
+# plt.xticks(np.arange(0,21,2),fontsize=16,fontweight='bold')
+# plt.yticks(fontsize=16,fontweight='bold')
+plt.savefig('energy.png')
 plt.show()
 
-#
-#
-#
-# # show KPI
-# # figure(figsize=(6.5, 8), dpi=80)
-# plt.plot(KPI,marker='o', color='b', linewidth=2)
-# plt.xlabel("Spin Iteration",fontsize=16,fontweight='bold')
-# plt.ylabel('Energy',fontsize=16,fontweight='bold')
-# # plt.xticks(np.arange(0,21,2),fontsize=16,fontweight='bold')
-# # plt.yticks(fontsize=16,fontweight='bold')
-# plt.savefig('energy.png')
-# plt.show()
-#
 
 
 
