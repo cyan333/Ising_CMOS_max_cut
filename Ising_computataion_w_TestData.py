@@ -281,7 +281,7 @@ J = img2dict_generate_j(rows,cols,image_name)
 # print("JJJJJJ")
 # print(J)
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,3,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,2,Ising_KPI)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
@@ -292,6 +292,17 @@ next_spin = annealing_ver2(30,2000,this_spin,image_size, cols)
 # plt.show()
 # start Ising
 this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+# print(this_spin)
+# plt.axis('off')
+# plt.imshow(this_spin, cmap='Greys_r')
+# plt.show()
+
+# annealing
+next_spin = annealing_ver2(30,200,this_spin,image_size, cols)
+# plt.imshow(next_spin, cmap='Greys_r')
+# plt.show()
+# start Ising
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
@@ -396,52 +407,30 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
-# annealing
-next_spin = annealing_ver2(95,50,this_spin,image_size,cols)
-# plt.imshow(next_spin, cmap='Greys_r')
-# plt.show()
-# start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
-# print(this_spin)
-# plt.axis('off')
-# plt.imshow(this_spin, cmap='Greys_r')
-# plt.show()
+# # annealing
+# next_spin = annealing_ver2(95,50,this_spin,image_size,cols)
+# # plt.imshow(next_spin, cmap='Greys_r')
+# # plt.show()
+# # start Ising
+# this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
+# # print(this_spin)
+# # plt.axis('off')
+# # plt.imshow(this_spin, cmap='Greys_r')
+# # plt.show()
+
+# # annealing
+# next_spin = annealing_ver2(75,300,this_spin,image_size,cols)
+# # plt.imshow(next_spin, cmap='Greys_r')
+# # plt.show()
+# # start Ising
+# this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
+# # print(this_spin)
+# # plt.axis('off')
+# # plt.imshow(this_spin, cmap='Greys_r')
+# # plt.show()
 
 # annealing
-next_spin = annealing_ver2(75,300,this_spin,image_size,cols)
-# plt.imshow(next_spin, cmap='Greys_r')
-# plt.show()
-# start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
-# print(this_spin)
-# plt.axis('off')
-# plt.imshow(this_spin, cmap='Greys_r')
-# plt.show()
-
-# annealing
-next_spin = annealing_ver2(21,100,this_spin,image_size,cols)
-# plt.imshow(next_spin, cmap='Greys_r')
-# plt.show()
-# start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
-# print(this_spin)
-# plt.axis('off')
-# plt.imshow(this_spin, cmap='Greys_r')
-# plt.show()
-
-# annealing
-next_spin = annealing_ver2(22,40,this_spin,image_size,cols)
-# plt.imshow(next_spin, cmap='Greys_r')
-# plt.show()
-# start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-# print(this_spin)
-# plt.axis('off')
-# plt.imshow(this_spin, cmap='Greys_r')
-# plt.show()
-
-# annealing
-next_spin = annealing_ver2(22,20,this_spin,image_size,cols)
+next_spin = annealing_ver2(21,20,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
@@ -450,6 +439,28 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
 # plt.axis('off')
 plt.imshow(this_spin, cmap='Greys_r')
 plt.show()
+
+# # annealing
+# next_spin = annealing_ver2(22,40,this_spin,image_size,cols)
+# # plt.imshow(next_spin, cmap='Greys_r')
+# # plt.show()
+# # start Ising
+# this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+# # print(this_spin)
+# # plt.axis('off')
+# # plt.imshow(this_spin, cmap='Greys_r')
+# # plt.show()
+#
+# # annealing
+# next_spin = annealing_ver2(22,20,this_spin,image_size,cols)
+# # plt.imshow(next_spin, cmap='Greys_r')
+# # plt.show()
+# # start Ising
+# this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
+# # print(this_spin)
+# # plt.axis('off')
+# plt.imshow(this_spin, cmap='Greys_r')
+# plt.show()
 
 
 # # annealing
