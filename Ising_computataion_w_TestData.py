@@ -25,9 +25,10 @@ def img2bin(row,col,name):
     for r in range(row):
         for c in range(col):
             if binImg[r][c][3] > 0.5:
-                convertedImg[r][c] = 1
-            else:
+                # change there -1 or 1
                 convertedImg[r][c] = -1
+            else:
+                convertedImg[r][c] = +1
     return convertedImg
 
 
@@ -59,40 +60,42 @@ def img2dict_generate_j(rows,cols,image_name):
     # c = 2 # col
     new_J =[0,0,0,0,0,0,0,0]
     new_J_dict = {}
+    edge = 1
+    non_edge = -1
     for r in range(1, rows + 1):
         for c in range(1, cols + 1):
             if padded_target_img[r][c] == padded_target_img[r-1][c-1]:
-                new_J[0] = 1
+                new_J[0] = edge
             else:
-                new_J[0] = -1
+                new_J[0] = non_edge
             if padded_target_img[r][c] == padded_target_img[r-1][c]:
-                new_J[1] = 1
+                new_J[1] = edge
             else:
-                new_J[1] = -1
+                new_J[1] = non_edge
             if padded_target_img[r][c] == padded_target_img[r-1][c+1]:
-                new_J[2] = 1
+                new_J[2] = edge
             else:
-                new_J[2] = -1
+                new_J[2] = non_edge
             if padded_target_img[r][c] == padded_target_img[r][c+1]:
-                new_J[3] = 1
+                new_J[3] = edge
             else:
-                new_J[3] = -1
+                new_J[3] = non_edge
             if padded_target_img[r][c] == padded_target_img[r+1][c + 1]:
-                new_J[4] = 1
+                new_J[4] = edge
             else:
-                new_J[4] = -1
+                new_J[4] = non_edge
             if padded_target_img[r][c] == padded_target_img[r+1][c]:
-                new_J[5] = 1
+                new_J[5] = edge
             else:
-                new_J[5] = -1
+                new_J[5] = non_edge
             if padded_target_img[r][c] == padded_target_img[r+1][c-1]:
-                new_J[6] = 1
+                new_J[6] = edge
             else:
-                new_J[6] = -1
+                new_J[6] = non_edge
             if padded_target_img[r][c] == padded_target_img[r][c-1]:
-                new_J[7] = 1
+                new_J[7] = edge
             else:
-                new_J[7] = -1
+                new_J[7] = non_edge
             new_J_dict[ind2str(r-1, c-1)] = new_J
             new_J = [0, 0, 0, 0, 0, 0, 0, 0]
     return new_J_dict
@@ -272,21 +275,32 @@ plt.imshow(initial_spin, cmap='Greys_r')
 plt.show()
 
 
+
 # Generate J
 J = img2dict_generate_j(rows,cols,image_name)
 # print("JJJJJJ")
 # print(J)
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,10,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,3,Ising_KPI)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(30,1500,this_spin,image_size, cols)
+next_spin = annealing_ver2(30,2000,this_spin,image_size, cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
+# start Ising
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+# print(this_spin)
+# plt.axis('off')
+# plt.imshow(this_spin, cmap='Greys_r')
+# plt.show()
 
+# annealing
+next_spin = annealing_ver2(30,1600,this_spin,image_size, cols)
+# plt.imshow(next_spin, cmap='Greys_r')
+# plt.show()
 # start Ising
 this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
 # print(this_spin)
@@ -295,7 +309,18 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(20,1500,this_spin,image_size,cols)
+next_spin = annealing_ver2(30,1500,this_spin,image_size, cols)
+# plt.imshow(next_spin, cmap='Greys_r')
+# plt.show()
+# start Ising
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,5,Ising_KPI)
+# print(this_spin)
+# plt.axis('off')
+# plt.imshow(this_spin, cmap='Greys_r')
+# plt.show()
+
+# annealing
+next_spin = annealing_ver2(20,1200,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
@@ -383,7 +408,7 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(75,800,this_spin,image_size,cols)
+next_spin = annealing_ver2(75,300,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
@@ -394,7 +419,7 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(21,500,this_spin,image_size,cols)
+next_spin = annealing_ver2(21,100,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
@@ -405,19 +430,18 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,3,Ising_KPI)
 # plt.show()
 
 # annealing
-next_spin = annealing_ver2(22,600,this_spin,image_size,cols)
+next_spin = annealing_ver2(22,40,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,4,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 # plt.imshow(this_spin, cmap='Greys_r')
 # plt.show()
 
-
 # annealing
-next_spin = annealing_ver2(38,300,this_spin,image_size,cols)
+next_spin = annealing_ver2(22,20,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
@@ -426,6 +450,18 @@ this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
 # plt.axis('off')
 plt.imshow(this_spin, cmap='Greys_r')
 plt.show()
+
+
+# # annealing
+# next_spin = annealing_ver2(38,100,this_spin,image_size,cols)
+# # plt.imshow(next_spin, cmap='Greys_r')
+# # plt.show()
+# # start Ising
+# this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,10,Ising_KPI)
+# # print(this_spin)
+# # plt.axis('off')
+# plt.imshow(this_spin, cmap='Greys_r')
+# plt.show()
 
 
 
