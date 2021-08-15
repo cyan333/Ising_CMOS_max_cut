@@ -411,7 +411,7 @@ next_spin = annealing_ver2(38,10,this_spin,image_size,cols)
 # plt.imshow(next_spin, cmap='Greys_r')
 # plt.show()
 # start Ising
-this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,20,Ising_KPI)
+this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,15,Ising_KPI)
 # print(this_spin)
 # plt.axis('off')
 plt.imshow(this_spin, cmap='Greys_r')
