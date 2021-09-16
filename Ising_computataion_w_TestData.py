@@ -1,650 +1,304 @@
-import numpy as np
-import math
-import argparse
-import os
-from PIL import Image
-import matplotlib.pyplot as plt
-from matplotlib.pyplot import figure
-import numpy as np
-import copy
-import random
-
-
-image_size = 64*100
-rows, cols = (64,100)
-image_name ='testImg_64x100_eDRAM.png'
-
-
-def img2bin(row,col,name):
-    convertedImg = np.zeros((row, col))
-    #open image (binary image) from https://www.pixilart.com/draw?ref=home-page
-    binImg = Image.open(name)
-    binImg = np.array(binImg)
-
-    # Convert binary image rgba code [0 0 0 255] or [0 0 0 0] to 1 and -1 (memeory array)
-    for r in range(row):
-        for c in range(col):
-            if binImg[r][c][3] > 0.5:
-                # change there -1 or 1
-                convertedImg[r][c] = -1
-            else:
-                convertedImg[r][c] = 1
-    return convertedImg
-
-
-
-def img2bin_ver2(row,col,name):
-    convertedImg = np.zeros((row, col))
-    #open image (binary image) from https://www.pixilart.com/draw?ref=home-page
-    binImg = Image.open(name)
-    binImg = np.array(binImg)
-
-    # Convert binary image rgba code [0 0 0 255] or [0 0 0 0] to 1 and -1 (memeory array)
-    for r in range(row):
-        for c in range(col):
-            if binImg[r][c][3] > 0.5:
-                # change there -1 or 1
-                convertedImg[r][c] = -1
-            else:
-                convertedImg[r][c] = 1
-    return convertedImg
-
-
-def random_spin_generator(seed,row,col):
-    # Randonly create spin (-1 and 1)
-    convertedArr = np.zeros((row, col))
-    np.random.seed(seed)
-    convertedArr = np.floor(np.random.random((row, col)) + .5)
-
-    for r in range(rows):
-        for c in range(cols):
-            if convertedArr[r][c] > 0.5:
-                convertedArr[r][c] = 1
-            else:
-                convertedArr[r][c] = -1
-    return convertedArr
-
-
-def ind2str(x,y):
-    return str(x) + ',' + str(y)
-
-
-def img2dict_generate_j(rows,cols,image_name):
-    target_img = img2bin(rows,cols,image_name)
-    padded_target_img = pad_zeros_2_list(target_img,rows,cols)
-    # print(padded_target_img)
-
-    # r = 2 # row
-    # c = 2 # col
-    new_J =[0,0,0,0,0,0,0,0]
-    new_J_dict = {}
-    edge = 1
-    non_edge = -1
-    for r in range(1, rows + 1):
-        for c in range(1, cols + 1):
-            if padded_target_img[r][c] == padded_target_img[r-1][c-1]:
-                new_J[0] = edge
-            else:
-                new_J[0] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r-1][c]:
-                new_J[1] = edge
-            else:
-                new_J[1] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r-1][c+1]:
-                new_J[2] = edge
-            else:
-                new_J[2] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r][c+1]:
-                new_J[3] = edge
-            else:
-                new_J[3] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r+1][c + 1]:
-                new_J[4] = edge
-            else:
-                new_J[4] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r+1][c]:
-                new_J[5] = edge
-            else:
-                new_J[5] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r+1][c-1]:
-                new_J[6] = edge
-            else:
-                new_J[6] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r][c-1]:
-                new_J[7] = edge
-            else:
-                new_J[7] = non_edge
-            new_J_dict[ind2str(r-1, c-1)] = new_J
-            new_J = [0, 0, 0, 0, 0, 0, 0, 0]
-    return new_J_dict
-
-
-def img2dict_generate_j_ver2(rows,cols,image_name):
-    target_img = img2bin(rows,cols,image_name)
-    padded_target_img = pad_zeros_2_list(target_img,rows,cols)
-    # print(padded_target_img)
-
-    # r = 2 # row
-    # c = 2 # col
-    new_J =[0,0,0,0,0,0,0,0]
-    new_J_dict = {}
-    edge = 1
-    non_edge = -1
-    for r in range(1, rows + 1):
-        for c in range(1, cols + 1):
-            if padded_target_img[r][c] == padded_target_img[r-1][c-1]:
-                new_J[0] = edge
-            else:
-                new_J[0] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r-1][c]:
-                new_J[1] = edge
-            else:
-                new_J[1] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r-1][c+1]:
-                new_J[2] = edge
-            else:
-                new_J[2] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r][c+1]:
-                new_J[3] = edge
-            else:
-                new_J[3] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r+1][c + 1]:
-                new_J[4] = edge
-            else:
-                new_J[4] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r+1][c]:
-                new_J[5] = edge
-            else:
-                new_J[5] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r+1][c-1]:
-                new_J[6] = edge
-            else:
-                new_J[6] = non_edge
-            if padded_target_img[r][c] == padded_target_img[r][c-1]:
-                new_J[7] = edge
-            else:
-                new_J[7] = non_edge
-            new_J_dict[ind2str(r-1, c-1)] = new_J
-            new_J = [0, 0, 0, 0, 0, 0, 0, 0]
-    return new_J_dict
-
-
-def H_sigma_cal(r,c,spin,J):
-    result = -(spin[r-1,c-1] * J.get(ind2str(r-1,c-1))[0] \
-             + spin[r-1,c] * J.get(ind2str(r-1,c-1))[1] \
-             + spin[r-1,c+1] * J.get(ind2str(r-1,c-1))[2] \
-             + spin[r,c+1] * J.get(ind2str(r-1,c-1))[3] \
-             + spin[r+1,c+1] * J.get(ind2str(r-1,c-1))[4] \
-             + spin[r+1,c] * J.get(ind2str(r-1,c-1))[5] \
-             + spin[r+1,c-1] * J.get(ind2str(r-1,c-1))[6] \
-             + spin[r,c-1] * J.get(ind2str(r-1,c-1))[7])
-    # print(str(spin[r-1,c-1]) + ',' + str(spin[r-1,c]) + ',' + str(spin[r-1,c+1]) + ',' + str(spin[r,c+1])
-    #       + ',' + str(spin[r+1,c+1]) + ',' + str(spin[r+1,c]) + ',' + str(spin[r+1,c-1]) + ',' + str(spin[r,c-1]))
-
-    return result
-
-
-def update_spin(H_sigma):
-    if H_sigma >= 0:
-        sigma = -1
-    else:
-        sigma = 1
-    return sigma
-
-
-def update_spin_from_test_data(H_sigma):
-    if H_sigma > 0:
-        sigma = -1
-    else:
-        sigma = 1
-    return sigma
-
-
-
-def pad_zeros_2_list(thisArray,r,c):
-    padded_array = np.zeros((r + 2, c + 2)) - 1
-    # padded_array = np.zeros((r + 2, c + 2)) + 1
-    padded_array[1:thisArray.shape[0]+1, 1:thisArray.shape[1]+1] = thisArray
-    return padded_array
-
-
-def Ising_start(this_spin,J,rows,cols,total_iteration,Ising_KPI):
-    H_sigma_array = []
-    for i in range(total_iteration):
-        Ising_energy = 0
-        # print('iteration = ' + str(i))
-        next_spin = copy.deepcopy(this_spin)
-        # print(thisSpinArray)
-        for r in range(1,rows+1):
-            H_sigma_row = []
-            for c in range(1,cols+1):
-                # print('(' + str(r-1) + ',' + str(c-1) + ')')
-                H_sigma = H_sigma_cal(r, c, this_spin, J)
-                H_sigma_row.append(H_sigma)
-                Ising_energy = H_sigma*this_spin[r][c] + Ising_energy
-                # print('Ising_energy = ' + str(Ising_energy))
-                # print('H_sigma = ' + str(H_sigma))
-                this_sigma = update_spin_from_test_data(H_sigma)
-                # print('this_sigma = ' + str(this_sigma))
-                next_spin[r][c] = this_sigma
-            H_sigma_array.append(H_sigma_row)
-        # print("-------------")
-        # for i in range(len(H_sigma_array[0])):
-        #     print(H_sigma_array[i])
-        H_sigma_array = []
-        # H_sigma_array.clear()
-        # if i == 2:
-        #     plt.imshow(next_spin, cmap='Greys_r')
-        #     plt.axis('off')
-        #     plt.savefig('Iter2.png')
-        #     plt.show()
-
-        # print('next_spin')
-        # print(next_spin)
-        # print('Ising_energy = ' + str(Ising_energy))
-        Ising_KPI.append(Ising_energy)
-        this_spin = next_spin
-
-    return next_spin,Ising_KPI,H_sigma_array
-
-
-def Ising_start_ver2(this_spin,J,rows,cols,total_iteration,Ising_KPI):
-    H_sigma_array = []
-    for i in range(total_iteration):
-        Ising_energy = 0
-        # print('iteration = ' + str(i))
-        next_spin = copy.deepcopy(this_spin)
-        # print(thisSpinArray)
-        for r in range(1,rows+1):
-            H_sigma_row = []
-            for c in range(1,cols+1):
-                # print('(' + str(r-1) + ',' + str(c-1) + ')')
-                H_sigma = H_sigma_cal(r, c, this_spin, J)
-                H_sigma_row.append(H_sigma)
-                Ising_energy = H_sigma*this_spin[r][c] + Ising_energy
-                # print('Ising_energy = ' + str(Ising_energy))
-                # print('H_sigma = ' + str(H_sigma))
-                this_sigma = update_spin(H_sigma)
-                # print('this_sigma = ' + str(this_sigma))
-                next_spin[r][c] = this_sigma
-            H_sigma_array.append(H_sigma_row)
-        # print("-------------")
-        # for i in range(len(H_sigma_array[0])):
-        #     print(H_sigma_array[i])
-        H_sigma_array = []
-        # H_sigma_array.clear()
-        # if i == 2:
-        #     plt.imshow(next_spin, cmap='Greys_r')
-        #     plt.axis('off')
-        #     plt.savefig('Iter2.png')
-        #     plt.show()
-
-        # print('next_spin')
-        # print(next_spin)
-        # print('Ising_energy = ' + str(Ising_energy))
-        Ising_KPI.append(Ising_energy)
-        this_spin = next_spin
-
-    return next_spin,Ising_KPI,H_sigma_array
-
-
-def annealing(this_spin,rows,cols):
-    howmanyTrue = 0
-    for r in range(1, rows + 1):
-        for c in range(1, cols + 1):
-            np.random.seed(1)
-            do_flip = bool(random.getrandbits(1))
-            # print(bool(random.getrandbits(1)))
-            # print(str(r) + ',' + str(c))
-            if do_flip:
-                # print('T')
-                howmanyTrue = howmanyTrue+1
-                # flip the spin randomly
-                if this_spin[r][c] == 1:
-                    this_spin[r][c] = -1
-                else:
-                    this_spin[r][c] = 1
-            else:
-                # print('F')
-                this_spin[r][c] = this_spin[r][c]
-    return this_spin,howmanyTrue
-
-
-def annealing_ver2(seed, number_of_flip, this_spin, img_size, col):
-    random.seed(seed)
-
-    # generate random number 1 4 6, each number representing flip position
-    this_random = random.sample(range(img_size), number_of_flip)
-
-    for i in range(number_of_flip):
-        # this_random = random.randint(0,99)
-        # print(this_random[i])
-
-        # generate column and row from the random decimal number
-        this_c = int(this_random[i] % col)
-        this_r = int(math.floor(this_random[i] / col))
-        # print("xxxxxxx")
-        # print(this_random[i])
-        # print(this_r)
-        # print(this_c)
-        # flip the spin
-        if this_spin[this_r+1][this_c+1] == 1:
-            this_spin[this_r+1][this_c+1] = -1
-        else:
-            this_spin[this_r+1][this_c+1] = 1
-    return this_spin
-
-
-def annealing_ver3(image_size,this_spin):
-    this_random = np.random.choice([0, 1], size=image_size, p=[.1, .9])
-    # print(this_random)
-    for i in range(image_size):
-        this_c = int(i % math.sqrt(image_size))
-        this_r = int(math.floor(i / math.sqrt(image_size)))
-        # print("i = " + str(i) + "---- (" + str(this_r) + "," + str(this_c) + ")")
-
-        if this_random[i] == 1:
-            if this_spin[this_r+1][this_c+1] == 1:
-                this_spin[this_r+1][this_c+1] = -1
-            else:
-                this_spin[this_r+1][this_c+1] = 1
-        else:
-            this_spin[this_r + 1][this_c + 1] = this_spin[this_r+1][this_c+1]
-    return this_spin
-
-
-J_dict = {ind2str(2,0): [1,1,-1,-1,1,1,1,1],
-          ind2str(2,1): [-1,1,1,1,-1,-1,-1,-1],
-          ind2str(2,2): [1,1,-1,-1,-1,-1,-1,1],
-          ind2str(2,3): [-1,1,1,1,1,1,1,-1],
-          ind2str(0,0): [1,1,1,1,-1,1,1,1],
-          ind2str(0,1): [1,1,1,1,-1,-1,1,1],
-          ind2str(0,2): [1,1,1,1,1,-1,-1,1],
-          ind2str(0,3): [1,1,1,1,1,1,-1,1],
-          ind2str(1,0): [1,1,1,-1,-1,1,1,1],
-          ind2str(1,1): [-1,-1,-1,1,1,1,-1,-1],
-          ind2str(1,2): [-1,-1,-1,-1,-1,1,1,1],
-          ind2str(1,3): [1,1,1,1,1,1,-1,-1],
-          ind2str(3,0): [1,1,-1,1,1,1,1,1],
-          ind2str(3,1): [1,-1,-1,1,1,1,1,1],
-          ind2str(3,2): [-1,-1,1,1,1,1,1,1],
-          ind2str(3,3): [-1,1,1,1,1,1,1,1]}
-
-
-def ising_test_data():
-    Ising_KPI = []
-    # Generate random spin
-    randomSpin = random_spin_generator(100,rows,cols)
-    # print(randomSpin)
-    initial_spin = pad_zeros_2_list(randomSpin,rows,cols)
-    # print(initial_spin)
-
-    plt.imshow(initial_spin, cmap='Greys')
-    plt.axis('off')
-    plt.savefig('Init.png')
-    plt.show()
-
-    # Generate J
-    J = img2dict_generate_j(rows,cols,image_name)
-
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,2,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(30,2000,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(30,200,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(30,1200,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-    plt.axis('off')
-    plt.savefig('iter1.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
-
-    # annealing
-    next_spin = annealing_ver2(30,200,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(30,900,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(3,500,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-    # annealing
-    next_spin = annealing_ver2(3,100,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(4,300,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
-    plt.axis('off')
-    plt.savefig('iter2.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
-
-    # annealing
-    next_spin = annealing_ver2(42,130,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-    # print(this_spin)
-
-
-    # annealing
-    next_spin = annealing_ver2(42,80,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-    # annealing
-    next_spin = annealing_ver2(6,20,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(63,50,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-    # annealing
-    next_spin = annealing_ver2(63,10,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(35,30,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,17,Ising_KPI)
-    # print(this_spin)
-    plt.axis('off')
-    plt.savefig('last.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
-
-    KPI_new = [x / 10000 for x in KPI]
-
-    # show KPI
-    # figure(figsize=(6.5, 8), dpi=80)
-    # plt.figure(1)
-    # plt.plot(KPI_new,marker='o', color='r', linewidth=2)
-    # plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
-    # plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
-    # plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
-    # plt.yticks(fontsize=16,fontweight='bold')
-    # plt.savefig('energy.png')
-    # plt.show()
-    return KPI_new
-
-def ising_test_data_ver2():
-    Ising_KPI = []
-    # Generate random spin
-    randomSpin = random_spin_generator(100,rows,cols)
-    # print(randomSpin)
-    initial_spin = pad_zeros_2_list(randomSpin,rows,cols)
-    # print(initial_spin)
-
-    plt.imshow(initial_spin, cmap='Greys')
-    plt.axis('off')
-    plt.savefig('Init.png')
-    plt.show()
-
-    # Generate J
-    J = img2dict_generate_j_ver2(rows,cols,image_name)
-
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,2,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(30,2000,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(30,100,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(30,1000,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-    plt.axis('off')
-    plt.savefig('iter1.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
-
-    # annealing
-    next_spin = annealing_ver2(30,30,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(30,600,this_spin,image_size, cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(3,400,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-    # annealing
-    next_spin = annealing_ver2(3,30,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(4,100,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
-    plt.axis('off')
-    plt.savefig('iter2.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
-
-    # annealing
-    next_spin = annealing_ver2(42,60,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-    # print(this_spin)
-
-
-    # annealing
-    next_spin = annealing_ver2(42,10,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-    # # annealing
-    # next_spin = annealing_ver2(6,5,this_spin,image_size,cols)
-    # # start Ising
-    # this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    # next_spin = annealing_ver2(63,20,this_spin,image_size,cols)
-    # # start Ising
-    # this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-    # annealing
-    # next_spin = annealing_ver2(63,10,this_spin,image_size,cols)
-    # # start Ising
-    # this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-
-
-    # annealing
-    next_spin = annealing_ver2(35,20,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,20,Ising_KPI)
-    # print(this_spin)
-    plt.axis('off')
-    plt.savefig('last.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
-
-    KPI_new = [x / 10000 for x in KPI]
-
-    # show KPI
-    # figure(figsize=(6.5, 8), dpi=80)
-    # plt.figure(1)
-    # plt.plot(KPI_new,marker='o', color='b', linewidth=2)
-    # plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
-    # plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
-    # plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
-    # plt.yticks(fontsize=16,fontweight='bold')
-    # plt.savefig('energy.png')
-    # plt.show()
-    return KPI_new
-
-KPI_test_data = ising_test_data()
-KPI_new = ising_test_data_ver2()
-
-
-plt.figure(1)
-plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
-plt.plot(KPI_new,marker='o', color='b', linewidth=2)
-plt.legend(["Case 1", "Case 2"])
-plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
-plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
-plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
-plt.yticks(fontsize=16,fontweight='bold')
-plt.savefig('energy.png')
-plt.show()
-
-# ising_software()
-
-
-
-
-
-
-
-
-
+fterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.22.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.23.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.23.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.26.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.26.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.27.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.27.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.29.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.29.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.36.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.36.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.41.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.41.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.43.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.43.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.44.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.44.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.47.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.47.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.50.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.50.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.51.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.51.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.59.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.59.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.61.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.61.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output/weights.87.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/output/weights.87.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output_2/conv1.pkl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output_2/conv1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output_2/scaling1.pkl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output_2/scaling1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/output_2/testchip_layer_conv1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/print_intermediate_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/print_intermediate_layer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/testchip_cifar10_inference.py" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/testchip_cifar10_inference.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/testchip_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/testchip_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/weight/converted_weight_CONV1_bin2Comp.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/weight/converted_weight_CONV1_bin2Comp1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/weight/converted_weight_CONV1_dec.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CIFAR10/training/weight_0824.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/CIFAR10/training/weight_0824.hdf5" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/binary_ops.py" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/binary_ops.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/convert_weight.py" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/convert_weight.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/first_trial.py" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/first_trial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/helper/max_dict.csv" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/helper/max_dict.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/helper/min_max_fine_2by2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/helper/min_max_fine_2by2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/minmax.py" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/minmax.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/print_intermediate_layer.py" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/print_intermediate_layer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/resnet50_inference_8bINT.py" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/resnet50_inference_8bINT.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/resnet50_inference_FP.py" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/resnet50_inference_FP.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/testchip_functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/testchip_functions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/testchip_inference_output/testchip_layer_conv1_officialData.txt" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/testchip_inference_output/testchip_layer_conv1_officialData.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/testchip_inference_output/testchip_layer_conv1_selfdata.txt" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/testchip_inference_output/testchip_layer_conv1_selfdata.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/testchip_resnet_inference.py" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/testchip_resnet_inference.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/weights/converted_weight_CONV1_bin2Comp.txt" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/weights/converted_weight_CONV1_bin2Comp.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/weights/converted_weight_CONV1_dec.txt" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/weights/converted_weight_CONV1_dec.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/RESNET/weights/resnet_weight_200epoch_selfdata.hdf5" beforeDir="false" afterPath="$PROJECT_DIR$/RESNET/weights/resnet_weight_200epoch_selfdata.hdf5" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JupyterTrust" id="e0c6aa56-bb93-4344-8d94-15ddcd271c34" />
+  <component name="ProjectId" id="1x9rXQQY4rcR7Uukez26Cpyq5dC" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.mappings" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.highlight.symlinks" value="true" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.date" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.permissions" value="false" />
+    <property name="WebServerToolWindowPanel.toolwindow.show.size" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/RESNET" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\PHD\Python\2T1CeDRAM_CIM\CIFAR10\training\helper" />
+      <recent name="D:\PHD\Python\2T1CeDRAM_CIM\CIFAR10\training" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\PHD\Python\2T1CeDRAM_CIM\RESNET" />
+      <recent name="D:\PHD\Python\2T1CeDRAM_CIM\CIFAR10\training" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.testchip_resnet_inference">
+    <configuration name="convert_weight" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2T1CeDRAM_CIM" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RESNET" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RESNET/convert_weight.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="print_intermediate_layer" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2T1CeDRAM_CIM" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RESNET" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RESNET/print_intermediate_layer.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="resnet50_inference_8bINT" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2T1CeDRAM_CIM" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RESNET" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RESNET/resnet50_inference_8bINT.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="testchip_resnet_inference" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2T1CeDRAM_CIM" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RESNET" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RESNET/testchip_resnet_inference.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="try_putting_to_GPU" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="2T1CeDRAM_CIM" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/RESNET" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/RESNET/try_putting_to_GPU.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.testchip_resnet_inference" />
+        <item itemvalue="Python.resnet50_inference_8bINT" />
+        <item itemvalue="Python.try_putting_to_GPU" />
+        <item itemvalue="Python.convert_weight" />
+        <item itemvalue="Python.print_intermediate_layer" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4c81fbe0-c753-48b4-bb0a-eb9b0c108a21" name="Default Changelist" comment="" />
+      <created>1629778183281</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1629778183281</updated>
+      <workItem from="1629778189955" duration="191463000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="2643" y="83" width="1736" height="856" key="DirDiffDialog" timestamp="1630196031116">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2643" y="83" width="1736" height="856" key="DirDiffDialog/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630196031116" />
+    <state width="1877" height="182" key="GridCell.Tab.0.bottom" timestamp="1630445735193">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1482" height="113" key="GridCell.Tab.0.bottom/0.0.2560.1040/2560.0.1920.1040@0.0.2560.1040" timestamp="1630098755559" />
+    <state width="1877" height="182" key="GridCell.Tab.0.bottom/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630445735193" />
+    <state width="1877" height="182" key="GridCell.Tab.0.center" timestamp="1630445735193">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1482" height="113" key="GridCell.Tab.0.center/0.0.2560.1040/2560.0.1920.1040@0.0.2560.1040" timestamp="1630098755559" />
+    <state width="1877" height="182" key="GridCell.Tab.0.center/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630445735193" />
+    <state width="1877" height="182" key="GridCell.Tab.0.left" timestamp="1630445735192">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1482" height="113" key="GridCell.Tab.0.left/0.0.2560.1040/2560.0.1920.1040@0.0.2560.1040" timestamp="1630098755559" />
+    <state width="1877" height="182" key="GridCell.Tab.0.left/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630445735192" />
+    <state width="1877" height="182" key="GridCell.Tab.0.right" timestamp="1630445735193">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1482" height="113" key="GridCell.Tab.0.right/0.0.2560.1040/2560.0.1920.1040@0.0.2560.1040" timestamp="1630098755559" />
+    <state width="1877" height="182" key="GridCell.Tab.0.right/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630445735193" />
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1630199388351">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630199388351" />
+    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1630199388351">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630199388351" />
+    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1630199388350">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630199388350" />
+    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1630199388351">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630199388351" />
+    <state x="3023" y="166" key="SettingsEditor" timestamp="1630181313300">
+      <screen x="2560" y="0" width="1920" height="1040" />
+    </state>
+    <state x="3023" y="166" key="SettingsEditor/0.0.2560.1040/2560.0.1920.1040@2560.0.1920.1040" timestamp="1630181313300" />
+    <state x="3175" y="139" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1629941959446">
+    
