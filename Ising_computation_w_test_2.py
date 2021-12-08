@@ -398,7 +398,7 @@ def ising_test_data():
 
 
     # annealing
-    next_spin = annealing_ver2(11,300,this_spin,image_size, cols)
+    next_spin = annealing_ver2(11,800,this_spin,image_size, cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 
@@ -524,7 +524,7 @@ def ising_test_data_ver2():
 
 
     # annealing
-    next_spin = annealing_ver2(30,100,this_spin,image_size, cols)
+    next_spin = annealing_ver2(30,1000,this_spin,image_size, cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 
@@ -624,8 +624,8 @@ def ising_test_data_ver2():
     # plt.show()
     return KPI_new
 
-KPI_test_data = ising_test_data()
-# KPI_new = ising_test_data_ver2()
+# KPI_test_data = ising_test_data()
+KPI_new = ising_test_data_ver2()
 
 
 # plt.figure(1)
