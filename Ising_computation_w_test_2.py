@@ -518,19 +518,19 @@ def ising_test_data_ver2():
 
 
     # annealing
-    next_spin = annealing_ver2(29,2500,this_spin,image_size, cols)
+    next_spin = annealing_ver2(29,2600,this_spin,image_size, cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 
 
     # annealing
-    next_spin = annealing_ver2(31,1900,this_spin,image_size, cols)
+    next_spin = annealing_ver2(31,100,this_spin,image_size, cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 
 
     # annealing
-    next_spin = annealing_ver2(32,2000,this_spin,image_size, cols)
+    next_spin = annealing_ver2(32,2500,this_spin,image_size, cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
     plt.axis('off')
