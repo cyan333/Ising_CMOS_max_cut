@@ -12,7 +12,7 @@ import random
 
 image_size = 64*100
 rows, cols = (64,100)
-image_name ='testImg_64x100_eDRAM.png'
+image_name ='testImg_64x100_eDRAM2.png'
 
 
 def img2bin(row,col,name):
@@ -608,6 +608,7 @@ def ising_test_data_ver2():
     plt.savefig('last.png')
     plt.imshow(this_spin, cmap='Greys')
     plt.show()
+    print(this_spin)
 
     KPI_new = [x / 10000 for x in KPI]
 

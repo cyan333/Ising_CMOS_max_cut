@@ -12,7 +12,7 @@ import random
 
 image_size = 64*100
 rows, cols = (64,100)
-image_name ='testImg_64x100_eDRAM.png'
+image_name ='testImg_64x100_eDRAM2.png'
 
 
 def img2bin(row,col,name):
