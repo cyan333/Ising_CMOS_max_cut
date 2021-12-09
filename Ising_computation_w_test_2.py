@@ -539,7 +539,7 @@ def ising_test_data_ver2():
     plt.show()
 
     # annealing
-    next_spin = annealing_ver2(30,1300,this_spin,image_size, cols)
+    next_spin = annealing_ver2(30,800,this_spin,image_size, cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 
@@ -550,10 +550,10 @@ def ising_test_data_ver2():
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
 
 
-    # annealing
-    next_spin = annealing_ver2(3,1100,this_spin,image_size,cols)
-    # start Ising
-    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+    # # annealing
+    # next_spin = annealing_ver2(3,200,this_spin,image_size,cols)
+    # # start Ising
+    # this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
 
     # annealing
     next_spin = annealing_ver2(8,1200,this_spin,image_size,cols)
@@ -562,7 +562,7 @@ def ising_test_data_ver2():
 
 
     # annealing
-    next_spin = annealing_ver2(11,700,this_spin,image_size,cols)
+    next_spin = annealing_ver2(11,500,this_spin,image_size,cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
     plt.axis('off')
@@ -571,7 +571,7 @@ def ising_test_data_ver2():
     plt.show()
 
     # annealing
-    next_spin = annealing_ver2(42,500,this_spin,image_size,cols)
+    next_spin = annealing_ver2(42,1000,this_spin,image_size,cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
     # print(this_spin)
@@ -623,12 +623,12 @@ def ising_test_data_ver2():
     # plt.show()
     return KPI_new
 
-# KPI_test_data = ising_test_data()
+KPI_test_data = ising_test_data()
 KPI_new = ising_test_data_ver2()
 
 
 plt.figure(1)
-# plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
+plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
 plt.plot(KPI_new,marker='o', color='b',linestyle='dashed', linewidth=2)
 plt.legend(["Case 1", "Case 2"])
 plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
