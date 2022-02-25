@@ -359,9 +359,9 @@ def annealing_ver3(image_size,this_spin):
 def ising_test_data():
     this_spin = []
     next_spin = []
-    N_trials = 120
+    N_trials = 10
     T_max = 0.01
-    T_min = 0.0001
+    T_min = 0.00001
     T_factor = -math.log(T_max / T_min)
 
     # T = T_max * math.exp(T_factor * i / N_trials)  # exponential cooling schedule
@@ -376,32 +376,43 @@ def ising_test_data():
     # Generate J
     J = img2dict_generate_j(rows,cols,image_name)
 
-    # start Ising
-    # next_spin = initial_spin
-    # this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,1,Ising_KPI)
+    probability = []
+    target_index = -1
 
-
-    # annealing
-    # next_spin = annealing_ver2(10, 2200, this_spin, image_size, cols)
-    # this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+    # num_flip = [2200, 1000, 800, 1500, 300, 900, 500, 500, 200, 400, 230, 100, 30, 50, 10, 30]
+    for i in range(2*N_trials):
+        T = T_max * math.exp(T_factor * i / 100)  # exponential cooling schedule
+        probability.append(math.exp(-0.01 / T))
+        # print("probability = ", probability)
+        # num_flip = 6000 * probability
+        # print(num_flip)
 
     for i in range(N_trials):
-        T = T_max * math.exp(T_factor * i / 200)  # exponential cooling schedule
-        # print("Temperature = ", T)
-        probability = math.exp(-T_max / T)
-        print("probability = ", probability)
-        print(2200*probability)
-
+        target_index = int(target_index+1+2*i)
         if i==0:
-            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 1, Ising_KPI)
+            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 2, Ising_KPI)
         else:
             # print("next spin =",next_spin)
-            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, 1, Ising_KPI)
-        if i%100 == 0:
+            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 10), Ising_KPI)
+        # print pic
+        if i%10 == 0:
+            plt.imshow(this_spin, cmap='Greys')
+            plt.show()
+        elif i == (N_trials-1):
             plt.imshow(this_spin, cmap='Greys')
             plt.show()
 
-        next_spin = annealing_ver2(i, int(2200*probability), this_spin, image_size, cols)
+        # if i< len(num_flip):
+        #     next_spin = annealing_ver2(i, num_flip[i], this_spin, image_size, cols)
+        if target_index<2*N_trials:
+            num_flip = 6000 * probability[target_index]
+            print('target index = ', target_index)
+            print(num_flip)
+
+        if i<N_trials-5:
+            next_spin = annealing_ver2(i, int(num_flip), this_spin, image_size, cols)
+        else:
+            next_spin = this_spin
 
     return KPI
 
