@@ -13,7 +13,7 @@ import random
 image_size = 64*100
 rows, cols = (64,100)
 # image_name ='testImg_1234abcd.png'
-image_name ='./image/testImg_64x100_coffee.png'
+image_name ='./image/testImg_64x100_ieee.png'
 
 
 def img2bin(row,col,name):
@@ -375,7 +375,7 @@ def ising_test_data_ver2():
     J = img2dict_generate_j(rows,cols,image_name)
 
     probability = []
-    num_flip = [2400, 2300, 2000, 1500, 1000, 700, 500, 180, 100, 50, 30, 10]
+    num_flip = [2000, 1800, 1500, 1200, 1000, 500, 200, 100, 50, 30, 10]
     for i in range(len(num_flip)+10):
 
         if i==0:
@@ -480,7 +480,7 @@ def ising_test_data():
 
 
 KPI_test_data = ising_test_data_ver2()
-np.savetxt('./saved_energy_data/64x100_coffee.csv',KPI_test_data,delimiter="")
+np.savetxt('./saved_energy_data/64x100_IEEE.csv',KPI_test_data,delimiter="")
 
 
 plt.figure(1)
