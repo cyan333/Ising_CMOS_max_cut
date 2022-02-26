@@ -379,7 +379,6 @@ def ising_test_data():
     # Generate J
     J = img2dict_generate_j(rows,cols,image_name)
 
-<<<<<<< HEAD
     # print(J)
     # print("initial_spin")
     # print(initial_spin)
@@ -478,7 +477,7 @@ def ising_test_data():
 
     KPI = [x / 10000 for x in KPI]
 
-=======
+
     print(J)
     probability = []
     target_index = -1
@@ -526,13 +525,13 @@ def ising_test_data():
             next_spin = annealing_ver2(i, int(num_flip), this_spin, image_size, cols)
         else:
             next_spin = this_spin
->>>>>>> parent of ae837b5 (smile face done)
+
     return KPI
 
 
 
 KPI_test_data = ising_test_data()
-<<<<<<< HEAD
+
 # np.savetxt('./saved_energy_data/64x100_smile_face.csv',KPI_test_data,delimiter="")
 
 
@@ -545,7 +544,7 @@ KPI_test_data = ising_test_data()
 # plt.yticks(fontsize=16,fontweight='bold')
 # plt.savefig('energy.png')
 # plt.show()
-=======
+
 
 
 plt.figure(1)
@@ -557,7 +556,6 @@ plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
 plt.yticks(fontsize=16,fontweight='bold')
 plt.savefig('energy.png')
 plt.show()
->>>>>>> parent of ae837b5 (smile face done)
 
 # ising_software()
 
