@@ -10,10 +10,10 @@ import copy
 import random
 
 
+image_size = 64*100
 rows, cols = (64,100)
-image_size = rows*cols
 # image_name ='testImg_1234abcd.png'
-image_name ='./image/testImg_64x100_center_square.png'
+image_name ='./image/testImg_64x100_smile.png'
 
 
 def img2bin(row,col,name):
@@ -27,9 +27,9 @@ def img2bin(row,col,name):
         for c in range(col):
             if binImg[r][c][3] > 0.5:
                 # change there -1 or 1
-                convertedImg[r][c] = -1
+                convertedImg[r][c] = -11
             else:
-                convertedImg[r][c] = +1
+                convertedImg[r][c] = 1
     return convertedImg
 
 
@@ -74,48 +74,47 @@ def img2dict_generate_j(rows,cols,image_name):
     target_img = img2bin(rows,cols,image_name)
     padded_target_img = pad_zeros_2_list(target_img,rows,cols)
     # print(padded_target_img)
-    # np.savetxt('./saved_energy_data/target_image.csv', padded_target_img, delimiter=",")
 
     # r = 2 # row
     # c = 2 # col
     new_J =[0,0,0,0,0,0,0,0]
     new_J_dict = {}
-    not_interset = 1
-    interset = -1
+    edge = 1
+    non_edge = -1
     for r in range(1, rows + 1):
         for c in range(1, cols + 1):
             if padded_target_img[r][c] == padded_target_img[r-1][c-1]:
-                new_J[0] = not_interset
+                new_J[0] = edge
             else:
-                new_J[0] = interset
+                new_J[0] = non_edge
             if padded_target_img[r][c] == padded_target_img[r-1][c]:
-                new_J[1] = not_interset
+                new_J[1] = edge
             else:
-                new_J[1] = interset
+                new_J[1] = non_edge
             if padded_target_img[r][c] == padded_target_img[r-1][c+1]:
-                new_J[2] = not_interset
+                new_J[2] = edge
             else:
-                new_J[2] = interset
+                new_J[2] = non_edge
             if padded_target_img[r][c] == padded_target_img[r][c+1]:
-                new_J[3] = not_interset
+                new_J[3] = edge
             else:
-                new_J[3] = interset
+                new_J[3] = non_edge
             if padded_target_img[r][c] == padded_target_img[r+1][c + 1]:
-                new_J[4] = not_interset
+                new_J[4] = edge
             else:
-                new_J[4] = interset
+                new_J[4] = non_edge
             if padded_target_img[r][c] == padded_target_img[r+1][c]:
-                new_J[5] = not_interset
+                new_J[5] = edge
             else:
-                new_J[5] = interset
+                new_J[5] = non_edge
             if padded_target_img[r][c] == padded_target_img[r+1][c-1]:
-                new_J[6] = not_interset
+                new_J[6] = edge
             else:
-                new_J[6] = interset
+                new_J[6] = non_edge
             if padded_target_img[r][c] == padded_target_img[r][c-1]:
-                new_J[7] = not_interset
+                new_J[7] = edge
             else:
-                new_J[7] = interset
+                new_J[7] = non_edge
             new_J_dict[ind2str(r-1, c-1)] = new_J
             new_J = [0, 0, 0, 0, 0, 0, 0, 0]
     return new_J_dict
@@ -195,7 +194,7 @@ def update_spin(H_sigma):
 
 
 def update_spin_from_test_data(H_sigma):
-    if H_sigma >= 0: # >
+    if H_sigma > 0:
         sigma = -1
     else:
         sigma = 1
@@ -211,9 +210,8 @@ def pad_zeros_2_list(thisArray,r,c):
 
 
 def Ising_start(this_spin,J,rows,cols,total_iteration,Ising_KPI):
-
+    H_sigma_array = []
     for i in range(total_iteration):
-        H_sigma_array = []
         Ising_energy = 0
         # print('iteration = ' + str(i))
         next_spin = copy.deepcopy(this_spin)
@@ -234,7 +232,7 @@ def Ising_start(this_spin,J,rows,cols,total_iteration,Ising_KPI):
         # print("-------------")
         # for i in range(len(H_sigma_array[0])):
         #     print(H_sigma_array[i])
-        # H_sigma_array = []
+        H_sigma_array = []
         # H_sigma_array.clear()
         # if i == 2:
         #     plt.imshow(next_spin, cmap='Greys_r')
@@ -379,112 +377,13 @@ def ising_test_data():
     # Generate J
     J = img2dict_generate_j(rows,cols,image_name)
 
-    # print(J)
-    # print("initial_spin")
-    # print(initial_spin)
-    #
-    # this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 7, Ising_KPI)
-    # plt.imshow(this_spin, cmap='Greys')
-    # plt.show()
-    # # this_spin[0:8][2:10] = 1
-    # next_spin = annealing_ver2(1, 70, this_spin, image_size, cols)
-    # plt.imshow(this_spin, cmap='Greys')
-    # plt.show()
-    #
-    # this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 7, Ising_KPI)
-    # plt.imshow(this_spin, cmap='Greys')
-    # plt.show()
-    # print('11111111111111')
-    #
-    # this_spin[0:64][0:100] = 1
-    # # print('2222222222222')
-    # # print(type(this_spin[0][0]))
-    # # print(this_spin)
-    # plt.imshow(this_spin, cmap='Greys')
-    # plt.show()
-    #
-    #
-    # this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 7, Ising_KPI)
-    # plt.imshow(this_spin, cmap='Greys')
-    # plt.show()
-    # # print("thihhhhhhhhhhhhhhhhhhhhhh")
-    # # print(this_spin)
-    #
-    # this_spin[20:40][20:65] = -1
-    # plt.imshow(this_spin, cmap='Greys')
-    # plt.show()
-    #
-    # this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 7, Ising_KPI)
-    # plt.imshow(this_spin, cmap='Greys')
-    # plt.show()
-    #
-    # this_spin[20:40][20:65] = -1
-    # plt.imshow(this_spin, cmap='Greys')
-    # plt.show()
-    #
-    # this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 20, Ising_KPI)
-    # plt.imshow(this_spin, cmap='Greys')
-    # plt.show()
-
-
-
-    # probability = []
-    # target_index = -1
-    #
-    # # num_flip = [2200, 1000, 800, 1500, 300, 900, 500, 500, 200, 400, 230, 100, 30, 50, 10, 30]
-    # for i in range(N_trials*2):
-    #     T = T_max * math.exp(T_factor * i / 300)  # exponential cooling schedule
-    #     probability.append(math.exp(-0.01 / T))
-    #     # print("probability = ", len(probability))
-    #     # num_flip = 6000 * probability
-    #     # print(num_flip)
-    #
-    # for i in range(N_trials):
-    #
-    #     target_index = int(target_index+1+2*i)
-    #
-    #
-    #
-    #     if i==0:
-    #         this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 1, Ising_KPI)
-    #     else:
-    #         # print("next spin =",next_spin)
-    #         this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 3), Ising_KPI)
-    #     # print pic
-    #     if i%2 == 0:
-    #         plt.imshow(this_spin, cmap='Greys')
-    #         plt.show()
-    #     elif i == (N_trials-1):
-    #         plt.imshow(this_spin, cmap='Greys')
-    #         plt.show()
-    #
-    #     # if i< len(num_flip):
-    #     #     next_spin = annealing_ver2(i, num_flip[i], this_spin, image_size, cols)
-    #     if target_index<N_trials*2:
-    #         num_flip = rows*cols * probability[target_index]
-    #         print('target index = ', target_index)
-    #         # print(num_flip)
-    #     # else:
-    #     #     num_flip = num_flip-90+random.randint(-10,30)
-    #
-    #     if i<N_trials-1:
-    #         # num_flip = rows*cols * probability[i]
-    #         # print('target index = ', target_index)
-    #         print(num_flip)
-    #         next_spin = annealing_ver2(i, int(num_flip), this_spin, image_size, cols)
-    #     else:
-    #         next_spin = this_spin
-
-    KPI = [x / 10000 for x in KPI]
-
-
     print(J)
     probability = []
     target_index = -1
 
     # num_flip = [2200, 1000, 800, 1500, 300, 900, 500, 500, 200, 400, 230, 100, 30, 50, 10, 30]
     for i in range(N_trials*2):
-        T = T_max * math.exp(T_factor * i / 400)  # exponential cooling schedule
+        T = T_max * math.exp(T_factor * i / 300)  # exponential cooling schedule
         probability.append(math.exp(-0.01 / T))
         # print("probability = ", len(probability))
         # num_flip = 6000 * probability
@@ -497,10 +396,10 @@ def ising_test_data():
 
 
         if i==0:
-            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 2, Ising_KPI)
+            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 1, Ising_KPI)
         else:
             # print("next spin =",next_spin)
-            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 10), Ising_KPI)
+            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 3), Ising_KPI)
         # print pic
         if i%2 == 0:
             plt.imshow(this_spin, cmap='Greys')
@@ -515,10 +414,10 @@ def ising_test_data():
             num_flip = rows*cols * probability[target_index]
             print('target index = ', target_index)
             # print(num_flip)
-        # else:
-        #     num_flip = num_flip-200
+        else:
+            num_flip = num_flip-90+random.randint(-10,30)
 
-        if i<N_trials-5:
+        if i<N_trials-6:
             # num_flip = rows*cols * probability[i]
             # print('target index = ', target_index)
             print(num_flip)
@@ -526,25 +425,14 @@ def ising_test_data():
         else:
             next_spin = this_spin
 
+    KPI = [x / 10000 for x in KPI]
+
     return KPI
 
 
 
 KPI_test_data = ising_test_data()
-
-# np.savetxt('./saved_energy_data/64x100_smile_face.csv',KPI_test_data,delimiter="")
-
-
-# plt.figure(1)
-# plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
-# plt.legend(["Case 1", "Case 2"])
-# plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
-# plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
-# plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
-# plt.yticks(fontsize=16,fontweight='bold')
-# plt.savefig('energy.png')
-# plt.show()
-
+np.savetxt('./saved_energy_data/64x100_smile_face.csv',KPI_test_data,delimiter="")
 
 
 plt.figure(1)
@@ -558,12 +446,3 @@ plt.savefig('energy.png')
 plt.show()
 
 # ising_software()
-
-
-
-
-
-
-
-
-
