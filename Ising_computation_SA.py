@@ -379,6 +379,7 @@ def ising_test_data():
     # Generate J
     J = img2dict_generate_j(rows,cols,image_name)
 
+<<<<<<< HEAD
     # print(J)
     # print("initial_spin")
     # print(initial_spin)
@@ -477,11 +478,61 @@ def ising_test_data():
 
     KPI = [x / 10000 for x in KPI]
 
+=======
+    print(J)
+    probability = []
+    target_index = -1
+
+    # num_flip = [2200, 1000, 800, 1500, 300, 900, 500, 500, 200, 400, 230, 100, 30, 50, 10, 30]
+    for i in range(N_trials*2):
+        T = T_max * math.exp(T_factor * i / 400)  # exponential cooling schedule
+        probability.append(math.exp(-0.01 / T))
+        # print("probability = ", len(probability))
+        # num_flip = 6000 * probability
+        # print(num_flip)
+
+    for i in range(N_trials):
+
+        target_index = int(target_index+1+2*i)
+
+
+
+        if i==0:
+            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 2, Ising_KPI)
+        else:
+            # print("next spin =",next_spin)
+            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 10), Ising_KPI)
+        # print pic
+        if i%2 == 0:
+            plt.imshow(this_spin, cmap='Greys')
+            plt.show()
+        elif i == (N_trials-1):
+            plt.imshow(this_spin, cmap='Greys')
+            plt.show()
+
+        # if i< len(num_flip):
+        #     next_spin = annealing_ver2(i, num_flip[i], this_spin, image_size, cols)
+        if target_index<N_trials*2:
+            num_flip = rows*cols * probability[target_index]
+            print('target index = ', target_index)
+            # print(num_flip)
+        # else:
+        #     num_flip = num_flip-200
+
+        if i<N_trials-5:
+            # num_flip = rows*cols * probability[i]
+            # print('target index = ', target_index)
+            print(num_flip)
+            next_spin = annealing_ver2(i, int(num_flip), this_spin, image_size, cols)
+        else:
+            next_spin = this_spin
+>>>>>>> parent of ae837b5 (smile face done)
     return KPI
 
 
 
 KPI_test_data = ising_test_data()
+<<<<<<< HEAD
 # np.savetxt('./saved_energy_data/64x100_smile_face.csv',KPI_test_data,delimiter="")
 
 
@@ -494,6 +545,19 @@ KPI_test_data = ising_test_data()
 # plt.yticks(fontsize=16,fontweight='bold')
 # plt.savefig('energy.png')
 # plt.show()
+=======
+
+
+plt.figure(1)
+plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
+plt.legend(["Case 1", "Case 2"])
+plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
+plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
+plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
+plt.yticks(fontsize=16,fontweight='bold')
+plt.savefig('energy.png')
+plt.show()
+>>>>>>> parent of ae837b5 (smile face done)
 
 # ising_software()
 
