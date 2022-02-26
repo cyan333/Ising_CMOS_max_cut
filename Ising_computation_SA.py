@@ -13,7 +13,7 @@ import random
 image_size = 64*100
 rows, cols = (64,100)
 # image_name ='testImg_1234abcd.png'
-image_name ='./image/testImg_64x100_smile.png'
+image_name ='./image/testImg_64x100_coffee.png'
 
 
 def img2bin(row,col,name):
@@ -354,7 +354,55 @@ def annealing_ver3(image_size,this_spin):
     return this_spin
 
 
+def ising_test_data_ver2():
+    this_spin = []
+    next_spin = []
+    N_trials = 20
+    T_max = 0.01
+    T_min = 0.00001
+    T_factor = -math.log(T_max / T_min)
 
+    # T = T_max * math.exp(T_factor * i / N_trials)  # exponential cooling schedule
+
+    Ising_KPI = []
+    # Generate random spin
+    randomSpin = random_spin_generator(100,rows,cols)
+    # print(randomSpin)
+    initial_spin = pad_zeros_2_list(randomSpin,rows,cols)
+    # print(initial_spin)
+
+    # Generate J
+    J = img2dict_generate_j(rows,cols,image_name)
+
+    probability = []
+    num_flip = [2400, 2300, 2000, 1500, 1000, 700, 500, 180, 100, 50, 30, 10]
+    for i in range(len(num_flip)+10):
+
+        if i==0:
+            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 2, Ising_KPI)
+        else:
+            # print("next spin =",next_spin)
+            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 3), Ising_KPI)
+
+        # print pic
+        if i%2 == 0:
+            plt.imshow(this_spin, cmap='Greys')
+            plt.show()
+        elif i == (N_trials-1):
+            plt.imshow(this_spin, cmap='Greys')
+            plt.show()
+
+
+
+        if i<len(num_flip):
+            next_spin = annealing_ver2(i, num_flip[i], this_spin, image_size, cols)
+        else:
+            next_spin = this_spin
+
+
+    KPI = [x / 10000 for x in KPI]
+
+    return KPI
 
 
 def ising_test_data():
@@ -431,8 +479,8 @@ def ising_test_data():
 
 
 
-KPI_test_data = ising_test_data()
-np.savetxt('./saved_energy_data/64x100_smile_face.csv',KPI_test_data,delimiter="")
+KPI_test_data = ising_test_data_ver2()
+np.savetxt('./saved_energy_data/64x100_coffee.csv',KPI_test_data,delimiter="")
 
 
 plt.figure(1)
