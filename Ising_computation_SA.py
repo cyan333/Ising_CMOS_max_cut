@@ -383,7 +383,7 @@ def ising_test_data():
 
     # num_flip = [2200, 1000, 800, 1500, 300, 900, 500, 500, 200, 400, 230, 100, 30, 50, 10, 30]
     for i in range(N_trials*2):
-        T = T_max * math.exp(T_factor * i / 400)  # exponential cooling schedule
+        T = T_max * math.exp(T_factor * i / 300)  # exponential cooling schedule
         probability.append(math.exp(-0.01 / T))
         # print("probability = ", len(probability))
         # num_flip = 6000 * probability
@@ -396,10 +396,10 @@ def ising_test_data():
 
 
         if i==0:
-            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 2, Ising_KPI)
+            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 1, Ising_KPI)
         else:
             # print("next spin =",next_spin)
-            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 10), Ising_KPI)
+            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 3), Ising_KPI)
         # print pic
         if i%2 == 0:
             plt.imshow(this_spin, cmap='Greys')
@@ -414,21 +414,25 @@ def ising_test_data():
             num_flip = rows*cols * probability[target_index]
             print('target index = ', target_index)
             # print(num_flip)
-        # else:
-        #     num_flip = num_flip-200
+        else:
+            num_flip = num_flip-90+random.randint(-10,30)
 
-        if i<N_trials-5:
+        if i<N_trials-6:
             # num_flip = rows*cols * probability[i]
             # print('target index = ', target_index)
             print(num_flip)
             next_spin = annealing_ver2(i, int(num_flip), this_spin, image_size, cols)
         else:
             next_spin = this_spin
+
+    KPI = [x / 10000 for x in KPI]
+
     return KPI
 
 
 
 KPI_test_data = ising_test_data()
+np.savetxt('./saved_energy_data/64x100_smile_face.csv',KPI_test_data,delimiter="")
 
 
 plt.figure(1)
