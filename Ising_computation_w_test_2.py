@@ -12,7 +12,7 @@ import random
 
 image_size = 64*100
 rows, cols = (64,100)
-image_name ='testImg_1234abcd.png'
+image_name ='./image/testImg_1234abcd.png'
 
 
 def img2bin(row,col,name):
@@ -624,19 +624,21 @@ def ising_test_data_ver2():
     return KPI_new
 
 KPI_test_data = ising_test_data()
-KPI_new = ising_test_data_ver2()
+# KPI_new = ising_test_data_ver2()
+print(KPI_test_data)
 
+np.savetxt('./saved_energy_data/64x100_123456ABCDEF.csv',KPI_test_data,delimiter="")
 
-plt.figure(1)
-plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
-plt.plot(KPI_new,marker='o', color='b',linestyle='dashed', linewidth=2)
-plt.legend(["Case 1", "Case 2"])
-plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
-plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
-plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
-plt.yticks(fontsize=16,fontweight='bold')
-plt.savefig('energy.png')
-plt.show()
+# plt.figure(1)
+# plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
+# # plt.plot(KPI_new,marker='o', color='b',linestyle='dashed', linewidth=2)
+# plt.legend(["Case 1", "Case 2"])
+# plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
+# plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
+# plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
+# plt.yticks(fontsize=16,fontweight='bold')
+# plt.savefig('energy.png')
+# plt.show()
 
 # ising_software()
 
