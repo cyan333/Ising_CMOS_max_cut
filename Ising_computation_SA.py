@@ -13,7 +13,7 @@ rows, cols = (200,300)
 image_size = rows*cols
 
 # image_name ='testImg_1234abcd.png'
-image_name ='./image/testImg_200x300_checkMark.png'
+image_name ='./image/testImg_200x300_drawing.png'
 
 
 def img2bin(row,col,name):
@@ -374,6 +374,8 @@ def ising_test_data_ver2():
     # Generate J
     J = img2dict_generate_j(rows,cols,image_name)
 
+
+
     probability = []
     num_flip = [50000, 40000, 30000, 20000, 50000, 10000, 5000, 3000, 1000, 800]
     for i in range(len(num_flip)+50):
@@ -382,13 +384,12 @@ def ising_test_data_ver2():
             this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 2, Ising_KPI)
         elif i>=len(num_flip):
             this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 100), Ising_KPI)
-
         else:
             # print("next spin =",next_spin)
             this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 10), Ising_KPI)
 
         # print pic
-        if i%10 == 0:
+        if i%2 == 0:
             plt.imshow(this_spin, cmap='Greys')
             plt.show()
         elif i == (len(num_flip)+50-1):
@@ -398,15 +399,17 @@ def ising_test_data_ver2():
 
 
         if i<len(num_flip):
-            # if i==10:
-            #     this_spin[0:175][40:260] = -1
-            #     plt.imshow(this_spin, cmap='Greys')
-            #     plt.show()
-            # else:
-            next_spin = annealing_ver2(i, num_flip[i], this_spin, image_size, cols)
+            if i==10:
+                this_spin[0:175][40:260] = -1
+                plt.imshow(this_spin, cmap='Greys')
+                plt.show()
+            else:
+                next_spin = annealing_ver2(i, num_flip[i], this_spin, image_size, cols)
+        # elif i==17:
+        #     this_spin[0:175][40:260] = -1
+        #     plt.imshow(this_spin, cmap='Greys')
+        #     plt.show()
         else:
-
-
             next_spin = this_spin
 
 
