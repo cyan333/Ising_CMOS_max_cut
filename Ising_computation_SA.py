@@ -13,7 +13,7 @@ rows, cols = (200,300)
 image_size = rows*cols
 
 # image_name ='testImg_1234abcd.png'
-image_name ='./image/testImg_200x300_drawing.png'
+image_name ='./image/testImg_200x300_IEEE.png'
 
 
 def img2bin(row,col,name):
@@ -232,7 +232,7 @@ def Ising_start(this_spin,J,rows,cols,total_iteration,Ising_KPI):
         # print("-------------")
         # for i in range(len(H_sigma_array[0])):
         #     print(H_sigma_array[i])
-        H_sigma_array = []
+        # H_sigma_array = []
         # H_sigma_array.clear()
         # if i == 2:
         #     plt.imshow(next_spin, cmap='Greys_r')
@@ -353,6 +353,128 @@ def annealing_ver3(image_size,this_spin):
             this_spin[this_r + 1][this_c + 1] = this_spin[this_r+1][this_c+1]
     return this_spin
 
+def helper_set_spin(spin, r_start, r_end, c_start, c_end, value):
+    for r in range(len(spin)):
+        for c in range(len(spin[0])):
+            if r>=r_start and r<= r_end and c>=c_start and c<=c_end:
+                spin[r][c] = value
+
+
+def setIEEE(this_spin):
+    helper_set_spin(this_spin, 11, 190, 21, 40, -1)
+    helper_set_spin(this_spin, 11, 190, 61, 80, -1)
+    helper_set_spin(this_spin, 11, 190, 141, 160, -1)
+    helper_set_spin(this_spin, 11, 190, 221, 240, -1)
+
+    helper_set_spin(this_spin, 11, 30, 81, 120, -1)
+    helper_set_spin(this_spin, 11, 30, 161, 200, -1)
+    helper_set_spin(this_spin, 11, 30, 241, 280, -1)
+
+    helper_set_spin(this_spin, 91, 110, 81, 120, -1)
+    helper_set_spin(this_spin, 91, 110, 161, 200, -1)
+    helper_set_spin(this_spin, 91, 110, 241, 280, -1)
+
+    helper_set_spin(this_spin, 171, 190, 81, 120, -1)
+    helper_set_spin(this_spin, 171, 190, 161, 200, -1)
+    helper_set_spin(this_spin, 171, 190, 241, 280, -1)
+    return this_spin
+
+def ising_test_data_ver3():
+    this_spin = []
+    next_spin = []
+    N_trials = 20
+    T_max = 0.01
+    T_min = 0.00001
+    T_factor = -math.log(T_max / T_min)
+
+    # T = T_max * math.exp(T_factor * i / N_trials)  # exponential cooling schedule
+
+    Ising_KPI = []
+    # Generate random spin
+    randomSpin = random_spin_generator(100,rows,cols)
+    # print(randomSpin)
+    initial_spin = pad_zeros_2_list(randomSpin,rows,cols)
+    # print(initial_spin)
+
+    # Generate J
+    J = img2dict_generate_j(rows,cols,image_name)
+    print("JJJJJJJJJJ")
+    print(J)
+
+    this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 2, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+    # helper_set_spin(this_spin, 11, 190, 11, 30, -1)
+
+    next_spin = annealing_ver2(1, 50000, this_spin, image_size, cols)
+    this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 1, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+
+    next_spin = annealing_ver2(1, 45000, this_spin, image_size, cols)
+    this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 2, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+    next_spin = annealing_ver2(1, 41000, this_spin, image_size, cols)
+    this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 3, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+    next_spin = annealing_ver2(1, 40000, this_spin, image_size, cols)
+    this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 1, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+    next_spin = annealing_ver2(1, 35000, this_spin, image_size, cols)
+    this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 2, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+    next_spin = annealing_ver2(1, 30000, this_spin, image_size, cols)
+    this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 1, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+    # helper_set_spin(this_spin, 1, 30, 1, 6, -1)
+
+    next_spin = annealing_ver2(1, 25000, this_spin, image_size, cols)
+    this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 1, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+    next_spin = annealing_ver2(1, 20000, this_spin, image_size, cols)
+    this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 2, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+    next_spin = annealing_ver2(1, 10000, this_spin, image_size, cols)
+    this_spin, KPI, H_sigma_array = Ising_start(this_spin, J, rows, cols, 1, Ising_KPI)
+    plt.imshow(this_spin, cmap='Greys')
+    plt.show()
+    print(H_sigma_array)
+
+    KPI = [x / 10000 for x in KPI]
+
+    return KPI
+
+    # next_spin = annealing_ver2(0, 50000, this_spin, image_size, cols)
+
+
+
+
+
 
 def ising_test_data_ver2():
     this_spin = []
@@ -374,43 +496,42 @@ def ising_test_data_ver2():
     # Generate J
     J = img2dict_generate_j(rows,cols,image_name)
 
-
-
     probability = []
-    num_flip = [50000, 40000, 30000, 20000, 50000, 10000, 5000, 3000, 1000, 800]
-    for i in range(len(num_flip)+50):
+    num_flip = [59000, 50000, 48000, 47000, 45000, 41000, 37080, 36000, 32000, 29000, 27000, 26000, 23000, 15000, 10000, 8000, 800]
+    for i in range(len(num_flip)+20):
 
         if i==0:
-            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 2, Ising_KPI)
+            this_spin, KPI, H_sigma_array = Ising_start(initial_spin, J, rows, cols, 10, Ising_KPI)
         elif i>=len(num_flip):
-            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 100), Ising_KPI)
+            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 5), Ising_KPI)
         else:
             # print("next spin =",next_spin)
-            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 10), Ising_KPI)
+            this_spin, KPI, H_sigma_array = Ising_start(next_spin, J, rows, cols, random.randint(1, 5), Ising_KPI)
 
         # print pic
         if i%2 == 0:
             plt.imshow(this_spin, cmap='Greys')
             plt.show()
-        elif i == (len(num_flip)+50-1):
+        elif i == (len(num_flip)+10-1):
             plt.imshow(this_spin, cmap='Greys')
             plt.show()
 
-
-
         if i<len(num_flip):
-            if i==10:
-                this_spin[0:175][40:260] = -1
-                plt.imshow(this_spin, cmap='Greys')
-                plt.show()
-            else:
-                next_spin = annealing_ver2(i, num_flip[i], this_spin, image_size, cols)
-        # elif i==17:
-        #     this_spin[0:175][40:260] = -1
-        #     plt.imshow(this_spin, cmap='Greys')
-        #     plt.show()
+
+            # print("shape", len(this_spin))
+            # print("hhhh")
+            next_spin = annealing_ver2(i, num_flip[i], this_spin, image_size, cols)
+
         else:
-            next_spin = this_spin
+            if i == len(num_flip)+1:
+                print("set spin here")
+                # this_spin = annealing_ver2(i, 2000, this_spin, image_size, cols)
+                next_spin = setIEEE(this_spin)
+
+                # plt.imshow(this_spin, cmap='Greys')
+                # plt.show()
+            else:
+                next_spin = this_spin
 
 
     KPI = [x / 10000 for x in KPI]
@@ -493,7 +614,7 @@ def ising_test_data():
 
 
 KPI_test_data = ising_test_data_ver2()
-np.savetxt('./saved_energy_data/64x100_IEEE.csv',KPI_test_data,delimiter="")
+# np.savetxt('./saved_energy_data/64x100_IEEE.csv',KPI_test_data,delimiter="")
 
 
 plt.figure(1)
