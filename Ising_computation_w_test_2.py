@@ -202,7 +202,7 @@ def update_spin_from_test_data(H_sigma):
 
 
 def pad_zeros_2_list(thisArray,r,c):
-    padded_array = np.zeros((r + 2, c + 2)) - 1
+    padded_array = np.zeros((r + 2, c + 2)) + 1
     # padded_array = np.zeros((r + 2, c + 2)) + 1
     padded_array[1:thisArray.shape[0]+1, 1:thisArray.shape[1]+1] = thisArray
     return padded_array
@@ -380,7 +380,7 @@ def ising_test_data():
     # print(initial_spin)
 
     plt.imshow(initial_spin, cmap='Greys')
-    plt.axis('off')
+    # plt.axis('off')
     plt.savefig('Init.png')
     plt.show()
 
@@ -407,7 +407,7 @@ def ising_test_data():
     next_spin = annealing_ver2(12,1500,this_spin,image_size, cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-    plt.axis('off')
+    # plt.axis('off')
     plt.savefig('iter1.png')
     plt.imshow(this_spin, cmap='Greys')
     plt.show()
@@ -439,7 +439,7 @@ def ising_test_data():
     next_spin = annealing_ver2(4,400,this_spin,image_size,cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
-    plt.axis('off')
+    # plt.axis('off')
     plt.savefig('iter2.png')
     plt.imshow(this_spin, cmap='Greys')
     plt.show()
@@ -478,7 +478,7 @@ def ising_test_data():
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,17,Ising_KPI)
     # print(this_spin)
-    plt.axis('off')
+    # plt.axis('off')
     plt.savefig('last.png')
     plt.imshow(this_spin, cmap='Greys')
     plt.show()
@@ -506,7 +506,7 @@ def ising_test_data_ver2():
     # print(initial_spin)
 
     plt.imshow(initial_spin, cmap='Greys')
-    plt.axis('off')
+    # plt.axis('off')
     plt.savefig('Init.png')
     plt.show()
 
@@ -533,7 +533,7 @@ def ising_test_data_ver2():
     next_spin = annealing_ver2(32,2500,this_spin,image_size, cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
-    plt.axis('off')
+    # plt.axis('off')
     plt.savefig('iter1.png')
     plt.imshow(this_spin, cmap='Greys')
     plt.show()
@@ -565,7 +565,7 @@ def ising_test_data_ver2():
     next_spin = annealing_ver2(11,500,this_spin,image_size,cols)
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
-    plt.axis('off')
+    # plt.axis('off')
     plt.savefig('iter2.png')
     plt.imshow(this_spin, cmap='Greys')
     plt.show()
@@ -627,7 +627,7 @@ KPI_test_data = ising_test_data()
 # KPI_new = ising_test_data_ver2()
 print(KPI_test_data)
 
-np.savetxt('./saved_energy_data/64x100_123456ABCDEF.csv',KPI_test_data,delimiter="")
+# np.savetxt('./saved_energy_data/64x100_123456ABCDEF.csv',KPI_test_data,delimiter="")
 
 # plt.figure(1)
 # plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
