@@ -381,8 +381,8 @@ def ising_test_data():
 
     plt.imshow(initial_spin, cmap='Greys')
     # plt.axis('off')
-    plt.savefig('Init.png')
-    plt.show()
+    # plt.savefig('Init.png')
+    # plt.show()
 
     # Generate J
     J = img2dict_generate_j(rows,cols,image_name)
@@ -408,9 +408,9 @@ def ising_test_data():
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
     # plt.axis('off')
-    plt.savefig('iter1.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
+    # plt.savefig('iter1.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
 
     # annealing
     next_spin = annealing_ver2(30,300,this_spin,image_size, cols)
@@ -440,9 +440,9 @@ def ising_test_data():
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
     # plt.axis('off')
-    plt.savefig('iter2.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
+    # plt.savefig('iter2.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
 
     # annealing
     next_spin = annealing_ver2(41,230,this_spin,image_size,cols)
@@ -479,9 +479,9 @@ def ising_test_data():
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,17,Ising_KPI)
     # print(this_spin)
     # plt.axis('off')
-    plt.savefig('last.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
+    # plt.savefig('last.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
 
     KPI_new = [x / 10000 for x in KPI]
 
@@ -507,8 +507,8 @@ def ising_test_data_ver2():
 
     plt.imshow(initial_spin, cmap='Greys')
     # plt.axis('off')
-    plt.savefig('Init.png')
-    plt.show()
+    # plt.savefig('Init.png')
+    # plt.show()
 
     # Generate J
     J = img2dict_generate_j_ver2(rows,cols,image_name)
@@ -534,9 +534,9 @@ def ising_test_data_ver2():
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
     # plt.axis('off')
-    plt.savefig('iter1.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
+    # plt.savefig('iter1.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
 
     # annealing
     next_spin = annealing_ver2(30,800,this_spin,image_size, cols)
@@ -566,9 +566,9 @@ def ising_test_data_ver2():
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
     # plt.axis('off')
-    plt.savefig('iter2.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
+    # plt.savefig('iter2.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
 
     # annealing
     next_spin = annealing_ver2(42,1000,this_spin,image_size,cols)
@@ -604,10 +604,10 @@ def ising_test_data_ver2():
     # start Ising
     this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,20,Ising_KPI)
     # print(this_spin)
-    plt.axis('off')
-    plt.savefig('last.png')
-    plt.imshow(this_spin, cmap='Greys')
-    plt.show()
+    # plt.axis('off')
+    # plt.savefig('last.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
 
     KPI_new = [x / 10000 for x in KPI]
 
@@ -623,22 +623,301 @@ def ising_test_data_ver2():
     # plt.show()
     return KPI_new
 
+def ising_test_data_1p2V():
+    Ising_KPI = []
+    # Generate random spin
+    randomSpin = random_spin_generator(100,rows,cols)
+    # print(randomSpin)
+    initial_spin = pad_zeros_2_list(randomSpin,rows,cols)
+    # print(initial_spin)
+
+    plt.imshow(initial_spin, cmap='Greys')
+    # plt.axis('off')
+    # plt.savefig('Init.png')
+    # plt.show()
+
+    # Generate J
+    J = img2dict_generate_j(rows,cols,image_name)
+
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,2,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(10,2500,this_spin,image_size, cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(11,900,this_spin,image_size, cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(12,1300,this_spin,image_size, cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+    # plt.axis('off')
+    # plt.savefig('iter1.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
+
+    # annealing
+    next_spin = annealing_ver2(30,800,this_spin,image_size, cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+    #
+    # # annealing
+    # next_spin = annealing_ver2(30,300,this_spin,image_size, cols)
+    # # start Ising
+    # this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(3,1000,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+    #
+    # # annealing
+    # next_spin = annealing_ver2(3,200,this_spin,image_size,cols)
+    # # start Ising
+    # this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(4,400,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+    # plt.axis('off')
+    # plt.savefig('iter2.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
+
+    # annealing
+    next_spin = annealing_ver2(41,700,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+    # print(this_spin)
+
+
+    # annealing
+    next_spin = annealing_ver2(42,100,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+    # annealing
+    next_spin = annealing_ver2(67,30,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(13,50,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+    # annealing
+    next_spin = annealing_ver2(23,10,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(10,30,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,17,Ising_KPI)
+    # print(this_spin)
+    # plt.axis('off')
+    # plt.savefig('last.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
+
+    KPI_new = [x / 10000 for x in KPI]
+
+    # show KPI
+    # figure(figsize=(6.5, 8), dpi=80)
+    # plt.figure(1)
+    # plt.plot(KPI_new,marker='o', color='r', linewidth=2)
+    # plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
+    # plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
+    # plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
+    # plt.yticks(fontsize=16,fontweight='bold')
+    # plt.savefig('energy.png')
+    # plt.show()
+    return KPI_new
+
+
+def ising_test_data_0p9V():
+    Ising_KPI = []
+    # Generate random spin
+    randomSpin = random_spin_generator(100,rows,cols)
+    # print(randomSpin)
+    initial_spin = pad_zeros_2_list(randomSpin,rows,cols)
+    # print(initial_spin)
+
+    plt.imshow(initial_spin, cmap='Greys')
+    # plt.axis('off')
+    # plt.savefig('Init.png')
+    # plt.show()
+
+    # Generate J
+    J = img2dict_generate_j(rows,cols,image_name)
+
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(initial_spin,J,rows,cols,2,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(11,2200,this_spin,image_size, cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(32,900,this_spin,image_size, cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(12,2200,this_spin,image_size, cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+    # plt.axis('off')
+    # plt.savefig('iter1.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
+
+    # annealing
+    next_spin = annealing_ver2(30,300,this_spin,image_size, cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(30,1200,this_spin,image_size, cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(3,500,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+    # annealing
+    next_spin = annealing_ver2(3,200,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(4,400,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+    # plt.axis('off')
+    # plt.savefig('iter2.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
+
+    # annealing
+    next_spin = annealing_ver2(41,230,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,2,Ising_KPI)
+    # print(this_spin)
+
+
+    # annealing
+    next_spin = annealing_ver2(42,100,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+    # annealing
+    next_spin = annealing_ver2(6,30,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(63,50,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+    # annealing
+    next_spin = annealing_ver2(63,20,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,1,Ising_KPI)
+
+
+    # annealing
+    next_spin = annealing_ver2(35,30,this_spin,image_size,cols)
+    # start Ising
+    this_spin,KPI,H_sigma_array = Ising_start(next_spin,J,rows,cols,17,Ising_KPI)
+    # print(this_spin)
+    # plt.axis('off')
+    # plt.savefig('last.png')
+    # plt.imshow(this_spin, cmap='Greys')
+    # plt.show()
+
+    KPI_new = [x / 10000 for x in KPI]
+
+    # show KPI
+    # figure(figsize=(6.5, 8), dpi=80)
+    # plt.figure(1)
+    # plt.plot(KPI_new,marker='o', color='r', linewidth=2)
+    # plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
+    # plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
+    # plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
+    # plt.yticks(fontsize=16,fontweight='bold')
+    # plt.savefig('energy.png')
+    # plt.show()
+    return KPI_new
+
 KPI_test_data = ising_test_data()
-# KPI_new = ising_test_data_ver2()
-print(KPI_test_data)
+KPI_0p9 = ising_test_data_0p9V()
+KPI_1p2 = ising_test_data_1p2V()
+KPI_case2 = ising_test_data_ver2()
 
 # np.savetxt('./saved_energy_data/64x100_123456ABCDEF.csv',KPI_test_data,delimiter="")
-
-# plt.figure(1)
-# plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
-# # plt.plot(KPI_new,marker='o', color='b',linestyle='dashed', linewidth=2)
-# plt.legend(["Case 1", "Case 2"])
-# plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
-# plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
-# plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
-# plt.yticks(fontsize=16,fontweight='bold')
+plt.rcParams["figure.figsize"] = (6,4)
+plt.figure(1)
+plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
+plt.plot(KPI_case2,marker='o', color='b',linestyle='dashed', linewidth=2)
+plt.legend(["Case 1", "Case 2"])
+plt.xlabel("Annealing Cycle",fontsize=16,fontweight='bold')
+plt.ylabel('Energy ($x10^{4}$)',fontsize=16,fontweight='bold')
+plt.xticks(np.arange(0,40,5),fontsize=16,fontweight='bold')
+plt.yticks(fontsize=16,fontweight='bold')
 # plt.savefig('energy.png')
-# plt.show()
+plt.show()
+
+plt.figure(3)
+plt.plot(KPI_test_data,marker='s', color='r', linewidth=2)
+plt.plot(KPI_case2,marker='o', color='b',linestyle='dashed', linewidth=2)
+plt.legend(["Case 1", "Case 2"])
+plt.xlabel("Annealing Cycle",fontsize=14,fontweight='bold')
+plt.ylabel('Hamiltonian Energy ($x10^{4}$)',fontsize=14,fontweight='bold')
+plt.xticks(np.arange(0,40,5),fontsize=14,fontweight='bold')
+plt.yticks(fontsize=16,fontweight='bold')
+plt.savefig('energy_case12.png')
+plt.show()
+
+
+plt.figure(2)
+plt.plot(KPI_0p9,marker='X', color='r', linewidth=2)
+plt.plot(KPI_test_data,marker='s', color='b', linewidth=2)
+plt.plot(KPI_1p2,marker='o', color='k', linewidth=2)
+plt.legend(["VDD=0.9V", "VDD=1V", "VDD=1.2V"])
+plt.xlabel("Annealing Cycle",fontsize=14,fontweight='bold')
+plt.ylabel('Hamiltonian Energy ($x10^{4}$)',fontsize=14,fontweight='bold')
+plt.xticks(np.arange(0,40,5),fontsize=14,fontweight='bold')
+plt.yticks(fontsize=16,fontweight='bold')
+plt.savefig('energy_vdd.png')
+plt.show()
+
 
 # ising_software()
 
